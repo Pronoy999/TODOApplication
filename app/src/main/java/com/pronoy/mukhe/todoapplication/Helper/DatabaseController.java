@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,25 +52,27 @@ public class DatabaseController {
      *
      * @return JSON Object: The JSON object mapped with the attribute name and the value.
      */
-    public JSONObject getAllTodo() {
+    public JSONArray getAllTodo() {
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
         String query = "SELECT * FROM " + Constants.TODO_TABLE_NAME + ";";
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
-        JSONObject todoData = new JSONObject();
+        JSONArray todolist = new JSONArray();
         try {
             while (!cursor.moveToNext()) {
+                JSONObject todoData=new JSONObject();
                 todoData.put(Constants.TODO_TABLE_ID, cursor.getInt(0));
                 todoData.put(Constants.TODO_TABLE_TITLE, cursor.getString(1));
                 todoData.put(Constants.TODO_TABLE_DESC, cursor.getString(2));
                 todoData.put(Constants.TODO_TABLE_PRIOROTY, cursor.getString(3));
                 todoData.put(Constants.TODO_TABLE_CATEGORYID, cursor.getInt(4));
                 todoData.put(Constants.TODO_TABLE_TIME_MILIS, cursor.getString(5));
+                todolist.put(todoData);
             }
         } catch (JSONException e) {
             Messages.logMessage(TAG_CLASS, e.toString());
         }
         cursor.close();
-        return todoData;
+        return todolist;
     }
 
     /**
@@ -97,21 +100,23 @@ public class DatabaseController {
      *
      * @return JSON Object: JSON Object containing all the category items.
      */
-    public JSONObject getAllCategories() {
+    public JSONArray getAllCategories() {
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
         String query = "SELECT * FROM " + Constants.CATEGORY_TABLE_NAME;
-        JSONObject category = new JSONObject();
+        JSONArray categoryArray = new JSONArray();
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         while (!cursor.moveToNext()) {
+            JSONObject category=new JSONObject();
             try {
                 category.put(Constants.CATEGORY_TABLE_ID, cursor.getInt(0));
                 category.put(Constants.CATEGORY_TABLE_DESC, cursor.getString(1));
             } catch (JSONException e) {
                 Messages.logMessage(TAG_CLASS, e.toString());
             }
+            categoryArray.put(category);
         }
         cursor.close();
-        return category;
+        return categoryArray;
     }
 
     /**
