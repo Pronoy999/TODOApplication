@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/circleTodo"
+        android:layout_width="40dp"
+        android:layout_height="46dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="36dp"
+        android:src="@drawable/circle"
+        app:layout_constraintEnd_toStartOf="@+id/todoTitle"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/todoTitle"
+        android:layout_width="171dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="4dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/todoDateTime"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Title" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/todoDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="15th Mar 9:15am" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/todoDesc"
+        android:layout_width="229dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:textSize="19sp"
+        app:layout_constraintStart_toEndOf="@+id/circleTodo"
+        app:layout_constraintTop_toBottomOf="@+id/todoTitle"
+        tools:text="Description about todo. How to do" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/deleteTodo"
+        android:layout_width="37dp"
+        android:layout_height="33dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/action_delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/todoDesc"
+        app:layout_constraintTop_toBottomOf="@+id/todoDateTime" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/priority"
+        android:layout_width="83dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="12dp"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/todoDesc"
+        tools:text="Priority: 5" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/categoryTodo"
+        android:layout_width="178dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.404"
+        app:layout_constraintStart_toEndOf="@+id/priority"
+        app:layout_constraintTop_toBottomOf="@+id/todoDesc"
+        tools:text="Category: Office" />
+</android.support.constraint.ConstraintLayout>

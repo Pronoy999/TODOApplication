@@ -1,7 +1,9 @@
 package com.pronoy.mukhe.todoapplication.Helper;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 /**
@@ -33,5 +35,21 @@ public class Messages {
         } else {
             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * This is the method to show a snackBar.
+     *
+     * @param view:   The View or the Layout where the Snack bar is to be shown.
+     * @param msg:    The Message that is to be displayed.
+     * @param length: The Length for the Snack Bar.
+     */
+    public static void snackbar(View view, String msg, String length) {
+        Snackbar snackbar;
+        if (length.equalsIgnoreCase("long")) {
+            snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
+        } else
+            snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_SHORT);
+        snackbar.show();
     }
 }
