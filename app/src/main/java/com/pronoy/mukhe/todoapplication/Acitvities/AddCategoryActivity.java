@@ -1,21 +1,19 @@
 package com.pronoy.mukhe.todoapplication.Acitvities;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.pronoy.mukhe.todoapplication.Adapters.CategoryAdapter;
 import com.pronoy.mukhe.todoapplication.Helper.Constants;
 import com.pronoy.mukhe.todoapplication.Helper.Messages;
 import com.pronoy.mukhe.todoapplication.Objects.Category;
-import com.pronoy.mukhe.todoapplication.Objects.Todo;
 import com.pronoy.mukhe.todoapplication.R;
 
 import org.json.JSONArray;
@@ -27,6 +25,7 @@ import java.util.ArrayList;
 public class AddCategoryActivity extends AppCompatActivity {
     ListView todoList;
     FloatingActionButton floatingActionButton;
+    CategoryAdapter categoryAdapter;
     private static final String TAG_CLASS = AddCategoryActivity.class.getSimpleName();
 
     @Override
@@ -38,7 +37,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(Constants.ADD_TODO_DIALOG);
+                showAddCategoryDialog();
             }
         });
     }
@@ -65,16 +64,44 @@ public class AddCategoryActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Messages.logMessage(TAG_CLASS, e.toString());
         }
-        CategoryAdapter categoryAdapter = new CategoryAdapter(AddCategoryActivity.this,
+        categoryAdapter = new CategoryAdapter(AddCategoryActivity.this,
                 categoryArrayList);
         todoList.setAdapter(categoryAdapter);
         categoryAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-        LayoutInflater layoutInflater = this.getLayoutInflater();
-        return builder.create();
+    /**
+     * This the method to add the category to the list.
+     * @param category: The new Category.
+     */
+    private void addCategory(String category){
+        ContentValues values=new ContentValues();
+        values.put(Constants.CATEGORY_TABLE_DESC,category);
+        Constants.databaseController.inserDataCategory(values);
+        categoryAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * This is the method to show the add category dialog.
+     */
+    private void showAddCategoryDialog(){
+        final Dialog dialog=new Dialog(getApplicationContext());
+        dialog.setContentView(R.layout.add_category_dialog);
+        AppCompatButton saveButton=dialog.findViewById(R.id.addCategoryButton);
+        AppCompatButton discardButton=dialog.findViewById(R.id.discardCategoryButton);
+        final AppCompatEditText categoryText=dialog.findViewById(R.id.categoryDescEnter);
+        discardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addCategory(categoryText.getText().toString());
+            }
+        });
+        dialog.show();
     }
 }

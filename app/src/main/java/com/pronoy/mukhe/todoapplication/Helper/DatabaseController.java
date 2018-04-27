@@ -56,7 +56,7 @@ public class DatabaseController {
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
         String query = "SELECT * FROM " + Constants.TODO_TABLE_NAME + ";";
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
-        JSONArray todolist = new JSONArray();
+        JSONArray todoArray = new JSONArray();
         try {
             while (!cursor.moveToNext()) {
                 JSONObject todoData=new JSONObject();
@@ -66,13 +66,13 @@ public class DatabaseController {
                 todoData.put(Constants.TODO_TABLE_PRIOROTY, cursor.getString(3));
                 todoData.put(Constants.TODO_TABLE_CATEGORYID, cursor.getInt(4));
                 todoData.put(Constants.TODO_TABLE_TIME_MILIS, cursor.getString(5));
-                todolist.put(todoData);
+                todoArray.put(todoData);
             }
         } catch (JSONException e) {
             Messages.logMessage(TAG_CLASS, e.toString());
         }
         cursor.close();
-        return todolist;
+        return todoArray;
     }
 
     /**
