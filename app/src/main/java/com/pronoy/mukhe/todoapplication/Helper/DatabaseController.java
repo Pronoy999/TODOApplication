@@ -89,6 +89,26 @@ public class DatabaseController {
         return desc.toString();
     }
 
+    /**
+     * This is the method to get all the category.
+     *
+     * @return: JSON Object containing all the category items.
+     */
+    public JSONObject getAllCategories() {
+        SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
+        String query = "SELECT * FROM " + Constants.CATEGORY_TABLE_NAME;
+        JSONObject category = new JSONObject();
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        while (!cursor.moveToNext()) {
+            try {
+                category.put(Constants.CATEGORY_TABLE_DESC, cursor.getString(1));
+            } catch (JSONException e) {
+                Messages.logMessage(TAG_CLASS, e.toString());
+            }
+        }
+        return category;
+    }
+
     public static class Helper extends SQLiteOpenHelper {
 
         public Helper(Context context) {
