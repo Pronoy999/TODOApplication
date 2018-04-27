@@ -54,4 +54,5 @@ public class Constants {
      */
     static final String DROP_TABLE_CATEGORY="DROP TABLE "+Constants.CATEGORY_TABLE_NAME;
     static final String DROP_TABLE_TODO="DROP TABLE "+Constants.TODO_TABLE_NAME;
+    public static final int ADD_TODO_DIALOG=69;
 }
