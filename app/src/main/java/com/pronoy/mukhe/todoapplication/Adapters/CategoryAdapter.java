@@ -42,6 +42,7 @@ public class CategoryAdapter extends ArrayAdapter {
                 @Override
                 public void onClick(View view) {
                     categories.remove(category);
+                    //TODO: Delete the category from Database.
                     notifyDataSetChanged();
                 }
             });
