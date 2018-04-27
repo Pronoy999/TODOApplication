@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import com.pronoy.mukhe.todoapplication.Helper.Constants;
 import com.pronoy.mukhe.todoapplication.Objects.Todo;
 import com.pronoy.mukhe.todoapplication.R;
 
@@ -53,7 +54,7 @@ public class TodoAdapter extends ArrayAdapter {
                 @Override
                 public void onClick(View view) {
                     todoList.remove(todo);
-                    //TODO: Delete the data from Database.
+                    Constants.databaseController.deleteTodoById(todo.getId());
                     notifyDataSetChanged();
                 }
             });

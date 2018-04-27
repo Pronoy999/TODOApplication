@@ -9,12 +9,13 @@ import java.util.Date;
 
 public class Todo {
     private String title, desc, category;
-    private int priority;
+    private int priority, id;
     Date date;
 
-    public Todo(String title, String desc, String category, int priority, long date) {
+    public Todo(String title, String desc, String category, int priority, int id, long date) {
         this.title = title;
         this.desc = desc;
+        this.id = id;
         this.category = category;
         this.priority = priority;
         this.date = new Date(date);
@@ -52,7 +53,19 @@ public class Todo {
         this.date = date;
     }
 
-    public String getCategory() { return category;  }
+    public String getCategory() {
+        return category;
+    }
 
-    public void setCategory(String category) { this.category = category; }
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
