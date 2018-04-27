@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import com.pronoy.mukhe.todoapplication.Helper.Constants;
 import com.pronoy.mukhe.todoapplication.Objects.Category;
 import com.pronoy.mukhe.todoapplication.R;
 
@@ -42,7 +43,7 @@ public class CategoryAdapter extends ArrayAdapter {
                 @Override
                 public void onClick(View view) {
                     categories.remove(category);
-                    //TODO: Delete the category from Database.
+                    Constants.databaseController.deleteCategoryByID(category.getCategoryID());
                     notifyDataSetChanged();
                 }
             });

@@ -28,7 +28,7 @@ public class DatabaseController {
      * This is the method to insert data to the Category table.
      *
      * @param values: The Values mapped with the category table column name.
-     * @return: The id after insertion. -1 if error.
+     * @return id: The id after insertion. -1 if error.
      */
     public long inserDataCategory(ContentValues values) {
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
@@ -39,7 +39,7 @@ public class DatabaseController {
      * This is the method to insert the data to the to_do table.
      *
      * @param values: The values mapped with the column name of the TO_DO table.
-     * @return: The id after insertion. -1 if error.
+     * @return JSON Object: The id after insertion. -1 if error.
      */
     public long insertDataTodo(ContentValues values) {
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
@@ -49,7 +49,7 @@ public class DatabaseController {
     /**
      * This is the method to get all the TO_DO from the table.
      *
-     * @return: The JSON object mapped with the attribute name and the value.
+     * @return JSON Object: The JSON object mapped with the attribute name and the value.
      */
     public JSONObject getAllTodo() {
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
@@ -58,6 +58,7 @@ public class DatabaseController {
         JSONObject todoData = new JSONObject();
         try {
             while (!cursor.moveToNext()) {
+                todoData.put(Constants.TODO_TABLE_ID, cursor.getInt(0));
                 todoData.put(Constants.TODO_TABLE_TITLE, cursor.getString(1));
                 todoData.put(Constants.TODO_TABLE_DESC, cursor.getString(2));
                 todoData.put(Constants.TODO_TABLE_PRIOROTY, cursor.getString(3));
@@ -67,6 +68,7 @@ public class DatabaseController {
         } catch (JSONException e) {
             Messages.logMessage(TAG_CLASS, e.toString());
         }
+        cursor.close();
         return todoData;
     }
 
@@ -74,7 +76,7 @@ public class DatabaseController {
      * This is the method to get the Category Desc by the ID.
      *
      * @param categoryID: The ID whose Category Desc is needed.
-     * @return: The Category Desc as a String.
+     * @return String: The Category Desc as a String.
      */
     public String getCategoryByID(int categoryID) {
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
@@ -86,13 +88,14 @@ public class DatabaseController {
         while (!cursor.moveToNext()) {
             desc.append(cursor.getString(0));
         }
+        cursor.close();
         return desc.toString();
     }
 
     /**
      * This is the method to get all the category.
      *
-     * @return: JSON Object containing all the category items.
+     * @return JSON Object: JSON Object containing all the category items.
      */
     public JSONObject getAllCategories() {
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
@@ -101,17 +104,49 @@ public class DatabaseController {
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         while (!cursor.moveToNext()) {
             try {
+                category.put(Constants.CATEGORY_TABLE_ID, cursor.getInt(0));
                 category.put(Constants.CATEGORY_TABLE_DESC, cursor.getString(1));
             } catch (JSONException e) {
                 Messages.logMessage(TAG_CLASS, e.toString());
             }
         }
+        cursor.close();
         return category;
+    }
+
+    /**
+     * This is the method to delete the category by ID.
+     *
+     * @param categoryID: The ID of the category which is to be deleted.
+     */
+    public void deleteCategoryByID(int categoryID) {
+        SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
+        String query = "DELETE FROM " + Constants.CATEGORY_TABLE_NAME + " WHERE " +
+                Constants.CATEGORY_TABLE_ID + "=" + String.valueOf(categoryID) + ";";
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        cursor.moveToLast();
+        Messages.logMessage(TAG_CLASS,"Deleted the Category. ");
+        cursor.close();
+    }
+
+    /**
+     * This is the method to delete the TO_DO from the database by Id.
+     *
+     * @param todoId: The Id of the TO_DO to be deleted.
+     */
+    public void deleteTodoById(int todoId) {
+        SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
+        String query = "DELETE FROM " + Constants.TODO_TABLE_NAME + " WHERE " +
+                Constants.TODO_TABLE_ID + "=" + String.valueOf(todoId) + ";";
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        cursor.moveToLast();
+        Messages.logMessage(TAG_CLASS,"Deleted TODO.");
+        cursor.close();
     }
 
     public static class Helper extends SQLiteOpenHelper {
 
-        public Helper(Context context) {
+        Helper(Context context) {
             super(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
             Messages.logMessage(TAG_CLASS, "In Constructor.");
         }
