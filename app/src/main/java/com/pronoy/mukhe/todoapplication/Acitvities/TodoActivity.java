@@ -1,8 +1,10 @@
 package com.pronoy.mukhe.todoapplication.Acitvities;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +17,8 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.AppCompatTextView;
+import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.channels.Selector;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -67,7 +72,9 @@ public class TodoActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddTodoDialog();
+                //showAddTodoDialog();
+                showDialog(69);
+                Messages.logMessage(TAG_CLASS,"Button PRESSED.");
             }
         });
     }
@@ -109,18 +116,138 @@ public class TodoActivity extends AppCompatActivity {
      */
     private void showAddTodoDialog() {
         final Dialog dialog = new Dialog(TodoActivity.this);
-        dialog.setContentView(R.layout.add_todo_dialog);
-        final AppCompatEditText _title = dialog.findViewById(R.id.todoTitleEnter);
-        final AppCompatEditText _desc = dialog.findViewById(R.id.todoDescEnter);
-        final AppCompatCheckBox _isReminder = dialog.findViewById(R.id.isReminder);
-        final ConstraintLayout pickerLayout = dialog.findViewById(R.id.showPicker);
-        pickerLayout.setVisibility(View.GONE);
-        final AppCompatTextView _date = dialog.findViewById(R.id.date);
-        final AppCompatTextView _time = dialog.findViewById(R.id.time);
-        _category = dialog.findViewById(R.id.categoryEnter);
-        _priority = dialog.findViewById(R.id.priorityEnter);
-        AppCompatButton _saveButton = dialog.findViewById(R.id.saveButton);
-        AppCompatButton _discardButton = dialog.findViewById(R.id.discardButton);
+
+    }
+
+    /**
+     * This is the method to set all the categories to the Array List.
+     */
+    private void addCategoryToList() {
+        JSONArray categories = Constants.databaseController.getAllCategories();
+        categoryList.add("Categories:");//Add the heading.
+        try {
+            for (int i = 0; i < categories.length(); i++) {
+                JSONObject category = categories.getJSONObject(i);
+                categoryList.add(category.getString(Constants.CATEGORY_TABLE_DESC));
+            }
+        } catch (JSONException e) {
+            Messages.logMessage(TAG_CLASS, e.toString());
+        }
+    }
+
+    /**
+     * This is the method to add the Priority to the list.
+     */
+    private void addPriorityToList() {
+        priorityList.add("Priority:");//Adding the first heading.
+        for (int i = 0; i < 5; i++) {
+            priorityList.add(String.valueOf(i + 1));
+        }
+    }
+
+    /**
+     * Method to set the adapters for the spinners.
+     */
+    private void setAdapters() {
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_item, categoryList) {
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0)
+                    return false;
+                return true;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView,
+                                        @NonNull ViewGroup parent) {
+                View view1 = getDropDownView(position, convertView, parent);
+                AppCompatTextView textView = (AppCompatTextView) view1;
+                if (position == 0)
+                    textView.setTextColor(Color.GRAY);
+                else
+                    textView.setTextColor(Color.BLACK);
+                return view1;
+            }
+        };
+        categoryAdapter.setDropDownViewResource(R.layout.spinner_item);
+        _category.setAdapter(categoryAdapter);
+        ArrayAdapter<String> priorityAdapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_item, priorityList) {
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0)
+                    return false;
+                return true;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView,
+                                        @NonNull ViewGroup parent) {
+                View view = getDropDownView(position, convertView, parent);
+                AppCompatTextView textView = (AppCompatTextView) view;
+                if (position == 0)
+                    textView.setTextColor(Color.GRAY);
+                else
+                    textView.setTextColor(Color.BLACK);
+                return view;
+            }
+        };
+        priorityAdapter.setDropDownViewResource(R.layout.spinner_item);
+        _priority.setAdapter(priorityAdapter);
+    }
+
+    /**
+     * Method to set the TO_DO without the reminder.
+     *
+     * @param title: The title of the TO_DO.
+     * @param desc:  The Description of the TO_DO.
+     */
+    private void setTodoWithoutReminder(String title, String desc) {
+        JSONObject category=Constants.databaseController
+                .getCategoryID(_category.getSelectedItem().toString());
+        int categoryID=-1;
+        try {
+            categoryID = category.getInt(Constants.CATEGORY_TABLE_ID);
+        }catch (JSONException e){
+            Messages.logMessage(TAG_CLASS,e.toString());
+        }
+        ContentValues values=new ContentValues();
+        values.put(Constants.TODO_TABLE_TITLE,title);
+        values.put(Constants.TODO_TABLE_DESC,desc);
+        values.put(Constants.TODO_TABLE_PRIOROTY,Integer.valueOf(_priority.getSelectedItem().toString()));
+        values.put(Constants.TODO_TABLE_CATEGORYID,categoryID);
+        reminder.set(yearSelected,monthSelected,daySelected,hourSelected,minuteSelected);
+        values.put(Constants.TODO_TABLE_TIME_MILIS,String.valueOf(reminder.getTimeInMillis()));
+        long id=Constants.databaseController.insertDataTodo(values);
+        if(id<0){
+            Messages.snackbar(getCurrentFocus(),"Sorry, Couldn't add todo.","");
+            return;
+        }
+        Messages.toastMessage(getApplicationContext(),"Todo Added.","");
+    }
+
+    private void setTodoWithReminder(String title, String desc) {
+
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        final AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        LayoutInflater inflater=getLayoutInflater();
+        View view=inflater.inflate(R.layout.add_category_dialog,null);
+        builder.setView(view);
+        final AppCompatEditText _title = view.findViewById(R.id.todoTitleEnter);
+        final AppCompatEditText _desc = view.findViewById(R.id.todoDescEnter);
+        final AppCompatCheckBox _isReminder = view.findViewById(R.id.isReminder);
+        final ConstraintLayout pickerLayout = view.findViewById(R.id.showPicker);
+        //pickerLayout.setVisibility(View.GONE);
+        final AppCompatTextView _date = view.findViewById(R.id.date);
+        final AppCompatTextView _time = view.findViewById(R.id.time);
+        _category = view.findViewById(R.id.categoryEnter);
+        _priority = view.findViewById(R.id.priorityEnter);
+        AppCompatButton _saveButton =view.findViewById(R.id.saveButton);
+        AppCompatButton _discardButton = view.findViewById(R.id.discardButton);
         setAdapters();
         _isReminder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -210,100 +337,9 @@ public class TodoActivity extends AppCompatActivity {
         _discardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
+                dismissDialog(69);
             }
         });
-    }
-
-    /**
-     * This is the method to set all the categories to the Array List.
-     */
-    private void addCategoryToList() {
-        JSONArray categories = Constants.databaseController.getAllCategories();
-        categoryList.add("Categories:");//Add the heading.
-        try {
-            for (int i = 0; i < categories.length(); i++) {
-                JSONObject category = categories.getJSONObject(i);
-                categoryList.add(category.getString(Constants.CATEGORY_TABLE_DESC));
-            }
-        } catch (JSONException e) {
-            Messages.logMessage(TAG_CLASS, e.toString());
-        }
-    }
-
-    /**
-     * This is the method to add the Priority to the list.
-     */
-    private void addPriorityToList() {
-        priorityList.add("Priority:");//Adding the first heading.
-        for (int i = 0; i < 5; i++) {
-            priorityList.add(String.valueOf(i + 1));
-        }
-    }
-
-    /**
-     * Method to set the adapters for the spinners.
-     */
-    private void setAdapters() {
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this,
-                R.layout.spinner_item, categoryList) {
-            @Override
-            public boolean isEnabled(int position) {
-                if (position == 0)
-                    return false;
-                return true;
-            }
-
-            @Override
-            public View getDropDownView(int position, @Nullable View convertView,
-                                        @NonNull ViewGroup parent) {
-                View view1 = getDropDownView(position, convertView, parent);
-                AppCompatTextView textView = (AppCompatTextView) view1;
-                if (position == 0)
-                    textView.setTextColor(Color.GRAY);
-                else
-                    textView.setTextColor(Color.BLACK);
-                return view1;
-            }
-        };
-        categoryAdapter.setDropDownViewResource(R.layout.spinner_item);
-        _category.setAdapter(categoryAdapter);
-        ArrayAdapter<String> priorityAdapter = new ArrayAdapter<String>(this,
-                R.layout.spinner_item, priorityList) {
-            @Override
-            public boolean isEnabled(int position) {
-                if (position == 0)
-                    return false;
-                return true;
-            }
-
-            @Override
-            public View getDropDownView(int position, @Nullable View convertView,
-                                        @NonNull ViewGroup parent) {
-                View view = getDropDownView(position, convertView, parent);
-                AppCompatTextView textView = (AppCompatTextView) view;
-                if (position == 0)
-                    textView.setTextColor(Color.GRAY);
-                else
-                    textView.setTextColor(Color.BLACK);
-                return view;
-            }
-        };
-        priorityAdapter.setDropDownViewResource(R.layout.spinner_item);
-        _priority.setAdapter(priorityAdapter);
-    }
-
-    /**
-     * Method to set the TO_DO without the reminder.
-     *
-     * @param title: The title of the TO_DO.
-     * @param desc:  The Description of the TO_DO.
-     */
-    private void setTodoWithoutReminder(String title, String desc) {
-
-    }
-
-    private void setTodoWithReminder(String title, String desc) {
-
+        return builder.create();
     }
 }

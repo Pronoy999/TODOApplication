@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pronoy.mukhe.todoapplication.SplashScreen">
-
+    tools:context="com.pronoy.mukhe.todoapplication.Acitvities.SplashScreen">
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 </android.support.constraint.ConstraintLayout>

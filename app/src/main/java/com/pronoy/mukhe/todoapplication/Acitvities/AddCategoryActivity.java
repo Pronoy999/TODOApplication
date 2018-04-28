@@ -77,7 +77,11 @@ public class AddCategoryActivity extends AppCompatActivity {
     private void addCategory(String category){
         ContentValues values=new ContentValues();
         values.put(Constants.CATEGORY_TABLE_DESC,category);
-        Constants.databaseController.inserDataCategory(values);
+        if(Constants.databaseController.insertDataCategory(values)<0){
+            Messages.toastMessage(getApplicationContext(),"Couldn't add Category.","");
+            return;
+        }
+        Messages.toastMessage(getApplicationContext(),"Category Added.","");
         categoryAdapter.notifyDataSetChanged();
     }
 
