@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/todoDescEnter" />
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/ShowPicker"
+        android:id="@+id/showPicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="16dp"
@@ -80,7 +80,7 @@
         android:layout_marginStart="68dp"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ShowPicker" />
+        app:layout_constraintTop_toBottomOf="@+id/showPicker" />
 
     <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/priorityEnter"
@@ -92,7 +92,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.72"
         app:layout_constraintStart_toEndOf="@+id/categoryEnter"
-        app:layout_constraintTop_toBottomOf="@+id/ShowPicker" />
+        app:layout_constraintTop_toBottomOf="@+id/showPicker" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/discardButton"
