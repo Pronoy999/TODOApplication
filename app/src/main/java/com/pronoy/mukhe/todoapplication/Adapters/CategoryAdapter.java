@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.pronoy.mukhe.todoapplication.Helper.Constants;
+import com.pronoy.mukhe.todoapplication.Helper.Messages;
 import com.pronoy.mukhe.todoapplication.Objects.Category;
 import com.pronoy.mukhe.todoapplication.R;
 
@@ -45,6 +46,7 @@ public class CategoryAdapter extends ArrayAdapter {
                 public void onClick(View view) {
                     categories.remove(category);
                     Constants.databaseController.deleteCategoryByID(category.getCategoryID());
+                    Messages.snackbar(view,category.getCategoryDesc()+" deleted.","");
                     notifyDataSetChanged();
                 }
             });

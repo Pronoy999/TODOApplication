@@ -57,7 +57,7 @@ public class AddTodoDialog extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_todo_dialog);
         initializeViews();
-        //_pickerLayout.setVisibility(View.GONE);
+        _pickerLayout.setVisibility(View.GONE);
         addCategoryToList();
         addPriorityToList();
         setAdapters();
