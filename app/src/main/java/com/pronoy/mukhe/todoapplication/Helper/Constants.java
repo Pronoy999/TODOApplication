@@ -55,5 +55,6 @@ public class Constants {
     static final String DROP_TABLE_CATEGORY="DROP TABLE "+Constants.CATEGORY_TABLE_NAME;
     static final String DROP_TABLE_TODO="DROP TABLE "+Constants.TODO_TABLE_NAME;
     public static final String LOG_IN_STATUS="loginStatus";
-    public static final int ADDTODO_DIALOG_REQUEST_CODE=69;
+    public static final int ADD_TODO_DIALOG_REQUEST_CODE =69;
+    public static final int ADD_CATEGORY_DIALOG_REQUEST_CODE=169;
 }

@@ -9,4 +9,5 @@
     <string name="save_todo">Save</string>
     <string name="category_hint">Category</string>
     <string name="add_category_button">add category</string>
+    <string name="categoryTitle">Add Category</string>
 </resources>

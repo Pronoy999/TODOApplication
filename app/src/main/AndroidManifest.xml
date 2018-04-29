@@ -18,9 +18,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Acitvities.AddCategoryActivity" />
+        <activity android:name=".Acitvities.CategoryActivity"
+            android:parentActivityName=".Acitvities.TodoActivity"/>
         <activity android:name=".Acitvities.TodoActivity" />
-        <activity android:name=".Acitvities.AddTodoDialog"
+        <activity
+            android:name=".Acitvities.AddTodoDialog"
+            android:theme="@style/custom" />
+        <activity android:name=".Acitvities.AddCategoryDialog"
             android:theme="@style/custom"/>
     </application>
 

@@ -6,7 +6,7 @@
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/spinnerItem"
+        android:id="@+id/spinnerText"
         android:fontFamily="sans-serif-condensed"
         tools:text="Household"
         android:textStyle="bold"

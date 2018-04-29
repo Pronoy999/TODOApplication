@@ -35,7 +35,7 @@ public class TodoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent addTodoIntent=new Intent(TodoActivity.this,AddTodoDialog.class);
-                startActivityForResult(addTodoIntent,Constants.ADDTODO_DIALOG_REQUEST_CODE);
+                startActivityForResult(addTodoIntent,Constants.ADD_TODO_DIALOG_REQUEST_CODE);
             }
         });
     }
@@ -74,6 +74,14 @@ public class TodoActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //TODO: notifyDataSetChanged.
+        if(requestCode==Constants.ADD_TODO_DIALOG_REQUEST_CODE){
+            if(resultCode==RESULT_OK){
+                getAllData();
+                Messages.snackbar(getCurrentFocus(),"Added a TODO.","");
+            }
+            else{
+                Messages.toastMessage(getApplicationContext(),"Didn't add.","");
+            }
+        }
     }
 }

@@ -8,7 +8,6 @@ import android.os.Bundle;
 
 import com.pronoy.mukhe.todoapplication.Helper.Constants;
 import com.pronoy.mukhe.todoapplication.Helper.DatabaseController;
-import com.pronoy.mukhe.todoapplication.Objects.Category;
 import com.pronoy.mukhe.todoapplication.R;
 
 public class SplashScreen extends AppCompatActivity {
@@ -29,7 +28,7 @@ public class SplashScreen extends AppCompatActivity {
                     SharedPreferences.Editor editor=sharedPreferences.edit();
                     editor.putBoolean(Constants.LOG_IN_STATUS,true);
                     editor.apply();
-                    changeActivityIntent=new Intent(SplashScreen.this, AddCategoryActivity.class);
+                    changeActivityIntent=new Intent(SplashScreen.this, CategoryActivity.class);
                 }
         else
                 changeActivityIntent=new Intent(SplashScreen.this,TodoActivity.class);

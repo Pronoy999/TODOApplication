@@ -3,6 +3,7 @@ package com.pronoy.mukhe.todoapplication.Acitvities;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,11 +37,12 @@ import java.util.Calendar;
 public class AddTodoDialog extends AppCompatActivity {
     private static final String TAG_CLASS = AddTodoDialog.class.getSimpleName();
 
-    AppCompatEditText _title, _desc, _date, _time;
+    AppCompatEditText _title, _desc;
+    AppCompatTextView _date, _time;
     AppCompatCheckBox _isReminder;
     AppCompatSpinner _category, _priority;
     AppCompatButton _saveButton, _discardButton;
-    ConstraintLayout constraintLayout;
+    ConstraintLayout _pickerLayout;
 
     String priority, category;
     boolean isDateSelected, isTimeSelected = false;
@@ -55,7 +57,7 @@ public class AddTodoDialog extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_todo_dialog);
         initializeViews();
-        constraintLayout.setVisibility(View.GONE);
+        _pickerLayout.setVisibility(View.GONE);
         addCategoryToList();
         addPriorityToList();
         setAdapters();
@@ -63,15 +65,17 @@ public class AddTodoDialog extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (compoundButton.isChecked()) {
-                    constraintLayout.setVisibility(View.VISIBLE);
-                } else constraintLayout.setVisibility(View.GONE);
+                    _pickerLayout.setVisibility(View.VISIBLE);
+                } else _pickerLayout.setVisibility(View.GONE);
             }
         });
         _priority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                priority = adapterView.getItemAtPosition(i).toString();
-                Messages.snackbar(view, "Priority Selected: " + priority, "");
+                if (i > 0) {
+                    priority = adapterView.getItemAtPosition(i).toString();
+                    Messages.snackbar(view, "Priority Selected: " + priority, "");
+                }
             }
 
             @Override
@@ -82,8 +86,10 @@ public class AddTodoDialog extends AppCompatActivity {
         _category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                category = adapterView.getItemAtPosition(i).toString();
-                Messages.snackbar(view, "Category selected: " + category, "");
+                if (i > 0) {
+                    category = adapterView.getItemAtPosition(i).toString();
+                    Messages.snackbar(view, "Category selected: " + category, "");
+                }
             }
 
             @Override
@@ -146,17 +152,16 @@ public class AddTodoDialog extends AppCompatActivity {
                 } else if (!category.equalsIgnoreCase("") &&
                         !priority.equalsIgnoreCase("")) {
                     saveReminder(false);
-                }
-                else {
+                } else {
                     Messages.toastMessage(getApplicationContext(),
-                            "Please select all the fields.","");
+                            "Please select all the fields.", "");
                 }
             }
         });
         _discardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: finish.
+                finishActivity(false);
             }
         });
     }
@@ -171,7 +176,7 @@ public class AddTodoDialog extends AppCompatActivity {
         _priority = findViewById(R.id.priorityEnter);
         _saveButton = findViewById(R.id.saveButton);
         _discardButton = findViewById(R.id.discardButton);
-        constraintLayout = findViewById(R.id.showPicker);
+        _pickerLayout = findViewById(R.id.showPicker);
     }
 
     /**
@@ -205,7 +210,7 @@ public class AddTodoDialog extends AppCompatActivity {
      */
     private void setAdapters() {
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this,
-                R.layout.spinner_item, categoryList) {
+                R.layout.spinner_item, R.id.categoryEnter, categoryList) {
             @Override
             public boolean isEnabled(int position) {
                 if (position == 0)
@@ -228,7 +233,7 @@ public class AddTodoDialog extends AppCompatActivity {
         categoryAdapter.setDropDownViewResource(R.layout.spinner_item);
         _category.setAdapter(categoryAdapter);
         ArrayAdapter<String> priorityAdapter = new ArrayAdapter<String>(this,
-                R.layout.spinner_item, priorityList) {
+                R.layout.spinner_item, R.id.priorityEnter, priorityList) {
             @Override
             public boolean isEnabled(int position) {
                 if (position == 0)
@@ -254,6 +259,7 @@ public class AddTodoDialog extends AppCompatActivity {
 
     /**
      * Method to insert data to Database and save the reminder.
+     *
      * @param isReminder: true, if there will be a notification, else false.
      */
     private void saveReminder(boolean isReminder) {
@@ -271,20 +277,36 @@ public class AddTodoDialog extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(yearSelected, monthSelected, daySelected, hourSelected, minuteSelected);
                 long reminderTime = calendar.getTimeInMillis();
-                values.put(Constants.TODO_TABLE_TIME_MILIS,reminderTime);
+                values.put(Constants.TODO_TABLE_TIME_MILIS, reminderTime);
+            } else {
+                values.put(Constants.TODO_TABLE_TIME_MILIS, 0);
             }
-            else{
-                values.put(Constants.TODO_TABLE_TIME_MILIS,0);
-            }
-            if(Constants.databaseController.insertDataTodo(values)<0){
-                Messages.toastMessage(getApplicationContext(),"Couldn't save Reminder.","");
+            if (Constants.databaseController.insertDataTodo(values) < 0) {
+                Messages.toastMessage(getApplicationContext(), "Couldn't save Reminder.", "");
+                finishActivity(false);
                 return;
             }
-            Messages.toastMessage(getApplicationContext(),"Reminder saved.","");
-        }catch (NullPointerException | JSONException e){
-            Messages.logMessage(TAG_CLASS,e.toString());
-            Messages.toastMessage(getApplicationContext(),"Couldn't save Reminder.","");
+            Messages.toastMessage(getApplicationContext(), "Reminder saved.", "");
+            finishActivity(true);
+        } catch (NullPointerException | JSONException e) {
+            Messages.logMessage(TAG_CLASS, e.toString());
+            Messages.toastMessage(getApplicationContext(), "Couldn't save Reminder.", "");
+            finishActivity(false);
         }
-        //TODO: Set Intent and finish.
+    }
+
+    /**
+     * Method to complete and close the dialog.
+     *
+     * @param isReminderSet: TRUE, if the reminder is set by the user, else false.
+     */
+    private void finishActivity(boolean isReminderSet) {
+        Intent returnIntent = new Intent();
+        if (isReminderSet)
+            setResult(RESULT_OK, returnIntent);
+        else {
+            setResult(RESULT_CANCELED, returnIntent);
+        }
+        finish();
     }
 }
