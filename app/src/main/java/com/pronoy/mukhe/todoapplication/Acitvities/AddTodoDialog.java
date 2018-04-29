@@ -57,7 +57,7 @@ public class AddTodoDialog extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_todo_dialog);
         initializeViews();
-        _pickerLayout.setVisibility(View.GONE);
+        //_pickerLayout.setVisibility(View.GONE);
         addCategoryToList();
         addPriorityToList();
         setAdapters();
@@ -78,6 +78,7 @@ public class AddTodoDialog extends AppCompatActivity {
                 monthSelected = monthOfYear;
                 daySelected = dayOfMonth;
                 isDateSelected = true;
+                //Messages.logMessage(TAG_CLASS,year+"**"+monthOfYear+"**"+dayOfMonth+"**");
                 _date.setText(String.valueOf(dayOfMonth + "-" + monthOfYear + "-" + year));
             }
         };
@@ -183,7 +184,7 @@ public class AddTodoDialog extends AppCompatActivity {
      */
     private void setAdapters() {
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this,
-                R.layout.spinner_item, R.id.categoryEnter, categoryList) {
+                R.layout.spinner_item, categoryList) {
             @Override
             public boolean isEnabled(int position) {
                 if (position == 0)
@@ -194,7 +195,7 @@ public class AddTodoDialog extends AppCompatActivity {
             @Override
             public View getDropDownView(int position, @Nullable View convertView,
                                         @NonNull ViewGroup parent) {
-                View view1 = getDropDownView(position, convertView, parent);
+                View view1 = super.getDropDownView(position, convertView, parent);
                 AppCompatTextView textView = (AppCompatTextView) view1;
                 if (position == 0)
                     textView.setTextColor(Color.GRAY);
@@ -222,7 +223,7 @@ public class AddTodoDialog extends AppCompatActivity {
         });
 
         ArrayAdapter<String> priorityAdapter = new ArrayAdapter<String>(this,
-                R.layout.spinner_item, R.id.priorityEnter, priorityList) {
+                R.layout.spinner_item, priorityList) {
             @Override
             public boolean isEnabled(int position) {
                 if (position == 0)
@@ -233,7 +234,7 @@ public class AddTodoDialog extends AppCompatActivity {
             @Override
             public View getDropDownView(int position, @Nullable View convertView,
                                         @NonNull ViewGroup parent) {
-                View view = getDropDownView(position, convertView, parent);
+                View view = super.getDropDownView(position, convertView, parent);
                 AppCompatTextView textView = (AppCompatTextView) view;
                 if (position == 0)
                     textView.setTextColor(Color.GRAY);
