@@ -19,7 +19,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Acitvities.AddCategoryActivity" />
-        <activity android:name=".Acitvities.TodoActivity"></activity>
+        <activity android:name=".Acitvities.TodoActivity" />
+        <activity android:name=".Acitvities.AddTodoDialog"
+            android:theme="@style/custom"/>
     </application>
 
 </manifest>
