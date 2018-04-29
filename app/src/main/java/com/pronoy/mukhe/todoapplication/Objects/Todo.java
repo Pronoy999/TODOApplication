@@ -1,5 +1,6 @@
 package com.pronoy.mukhe.todoapplication.Objects;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -18,7 +19,11 @@ public class Todo {
         this.id = id;
         this.category = category;
         this.priority = priority;
-        this.date = new Date(date);
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+        this.date = new Date(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.HOUR),calendar.get(Calendar.MONTH));
     }
 
     public String getTitle() {
@@ -46,6 +51,9 @@ public class Todo {
     }
 
     public Date getDate() {
+        String d=date.toString();
+        String parts[]=d.split(":");
+        String newDate=parts[0]+parts[1];
         return date;
     }
 

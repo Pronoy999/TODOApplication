@@ -10,4 +10,6 @@
     <string name="category_hint">Category</string>
     <string name="add_category_button">add category</string>
     <string name="categoryTitle">Add Category</string>
+    <string name="categories_menu">Categories</string>
+    <string name="open_to_do">Open to Do</string>
 </resources>
