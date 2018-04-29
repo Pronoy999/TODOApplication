@@ -35,6 +35,7 @@ import java.util.Calendar;
 
 public class AddTodoDialog extends AppCompatActivity {
     private static final String TAG_CLASS = AddTodoDialog.class.getSimpleName();
+
     AppCompatEditText _title, _desc, _date, _time;
     AppCompatCheckBox _isReminder;
     AppCompatSpinner _category, _priority;
@@ -57,6 +58,7 @@ public class AddTodoDialog extends AppCompatActivity {
         constraintLayout.setVisibility(View.GONE);
         addCategoryToList();
         addPriorityToList();
+        setAdapters();
         _isReminder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
