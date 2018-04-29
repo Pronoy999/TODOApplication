@@ -48,7 +48,10 @@ public class TodoAdapter extends ArrayAdapter {
             final Todo todo = todoList.get(position);
             _title.setText(todo.getTitle());
             _desc.setText(todo.getDesc());
-            _time.setText(String.valueOf(todo.getDate()));
+            String date=String.valueOf(todo.getDate());
+            String parts[]=date.split(":");
+            String newDate=parts[0]+":"+parts[1];
+            _time.setText(newDate);
             _priority.setText(String.valueOf(todo.getPriority()));
             _category.setText(todo.getCategory());
             _deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +65,10 @@ public class TodoAdapter extends ArrayAdapter {
             _circle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    _circle.setBackgroundColor(Color.parseColor(String.valueOf(R.color.complete)));
+                    _circle.setBackgroundColor(Color.GREEN);
+                    todoList.remove(todo);
+                    Constants.databaseController.deleteTodoById(todo.getId());
+                    notifyDataSetChanged();
                 }
             });
         }

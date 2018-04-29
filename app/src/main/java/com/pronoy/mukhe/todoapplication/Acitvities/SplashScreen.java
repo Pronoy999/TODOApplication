@@ -16,24 +16,25 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        Constants.databaseController=new DatabaseController(getApplicationContext());
+        Constants.databaseController = new DatabaseController(getApplicationContext());
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                SharedPreferences sharedPreferences=getPreferences(MODE_PRIVATE);
-                boolean isLoggedIn=sharedPreferences.getBoolean(Constants.LOG_IN_STATUS,false);
+                SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+                boolean isLoggedIn = sharedPreferences.getBoolean(Constants.LOG_IN_STATUS, false);
                 Intent changeActivityIntent;
-                if(!isLoggedIn){
-                    SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.putBoolean(Constants.LOG_IN_STATUS,true);
+                if (!isLoggedIn) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(Constants.LOG_IN_STATUS, true);
                     editor.apply();
-                    changeActivityIntent=new Intent(SplashScreen.this, CategoryActivity.class);
+                    changeActivityIntent = new Intent(SplashScreen.this, CategoryActivity.class);
+                } else {
+                    changeActivityIntent = new Intent(SplashScreen.this, TodoActivity.class);
                 }
-        else
-                changeActivityIntent=new Intent(SplashScreen.this,TodoActivity.class);
                 startActivity(changeActivityIntent);
+                finish();
             }
-        },2000);
+        }, 2000);
     }
 }

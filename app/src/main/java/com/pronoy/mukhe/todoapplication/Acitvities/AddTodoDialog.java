@@ -88,7 +88,7 @@ public class AddTodoDialog extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
                 new DatePickerDialog(AddTodoDialog.this, dateSetListener,
                         calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                        calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
         final TimePickerDialog.OnTimeSetListener timeSetListener = new
@@ -107,7 +107,7 @@ public class AddTodoDialog extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
                 new TimePickerDialog(AddTodoDialog.this, timeSetListener,
                         calendar.get(Calendar.HOUR),
-                        calendar.get(Calendar.MINUTE), true);
+                        calendar.get(Calendar.MINUTE), true).show();
             }
         });
         _saveButton.setOnClickListener(new View.OnClickListener() {
@@ -282,6 +282,7 @@ public class AddTodoDialog extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(yearSelected, monthSelected, daySelected, hourSelected, minuteSelected);
                 long reminderTime = calendar.getTimeInMillis();
+                Messages.logMessage(TAG_CLASS,"***"+reminderTime+"");
                 values.put(Constants.TODO_TABLE_TIME_MILIS, reminderTime);
             } else {
                 values.put(Constants.TODO_TABLE_TIME_MILIS, 0);

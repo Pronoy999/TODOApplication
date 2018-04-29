@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -79,5 +81,22 @@ public class CategoryActivity extends AppCompatActivity {
                 Messages.toastMessage(getApplicationContext(),"Couldn't add Category.","");
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.open_todo,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.openTodo:
+                Intent todoIntent=new Intent(CategoryActivity.this,TodoActivity.class);
+                startActivity(todoIntent);
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

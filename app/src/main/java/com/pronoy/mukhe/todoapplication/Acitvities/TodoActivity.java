@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -17,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TodoActivity extends AppCompatActivity {
 
@@ -57,10 +60,10 @@ public class TodoActivity extends AppCompatActivity {
                 JSONObject todoObject = todoArray.getJSONObject(i);
                 todo = new Todo(todoObject.getString(Constants.TODO_TABLE_TITLE),
                         todoObject.getString(Constants.TODO_TABLE_DESC),
-                        todoObject.getString(Constants.CATEGORY_TABLE_DESC),
+                        todoObject.getString(Constants.TODO_TABLE_CATEGORYID),
                         todoObject.getInt(Constants.TODO_TABLE_PRIOROTY),
                         todoObject.getInt(Constants.TODO_TABLE_ID),
-                        todoObject.getInt(Constants.TODO_TABLE_TIME_MILIS));
+                        todoObject.getLong(Constants.TODO_TABLE_TIME_MILIS));
                 arrayList.add(todo);
 
             } catch (JSONException e) {
@@ -77,11 +80,27 @@ public class TodoActivity extends AppCompatActivity {
         if(requestCode==Constants.ADD_TODO_DIALOG_REQUEST_CODE){
             if(resultCode==RESULT_OK){
                 getAllData();
-                Messages.snackbar(getCurrentFocus(),"Added a TODO.","");
+                Messages.toastMessage(getApplicationContext(),"Added a TODO.","");
             }
             else{
                 Messages.toastMessage(getApplicationContext(),"Didn't add.","");
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.open_category,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.openCategory:
+                Intent intent=new Intent(TodoActivity.this,CategoryActivity.class);
+                startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
