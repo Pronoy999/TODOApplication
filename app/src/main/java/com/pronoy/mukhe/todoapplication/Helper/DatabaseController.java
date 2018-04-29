@@ -3,6 +3,7 @@ package com.pronoy.mukhe.todoapplication.Helper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -31,7 +32,7 @@ public class DatabaseController {
      * @param values: The Values mapped with the category table column name.
      * @return id: The id after insertion. -1 if error.
      */
-    public long inserDataCategory(ContentValues values) {
+    public long insertDataCategory(ContentValues values) {
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
         return sqLiteDatabase.insert(Constants.CATEGORY_TABLE_NAME, null, values);
     }
@@ -58,8 +59,8 @@ public class DatabaseController {
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         JSONArray todoArray = new JSONArray();
         try {
-            while (!cursor.moveToNext()) {
-                JSONObject todoData=new JSONObject();
+            while (cursor.moveToNext()) {
+                JSONObject todoData = new JSONObject();
                 todoData.put(Constants.TODO_TABLE_ID, cursor.getInt(0));
                 todoData.put(Constants.TODO_TABLE_TITLE, cursor.getString(1));
                 todoData.put(Constants.TODO_TABLE_DESC, cursor.getString(2));
@@ -68,7 +69,7 @@ public class DatabaseController {
                 todoData.put(Constants.TODO_TABLE_TIME_MILIS, cursor.getString(5));
                 todoArray.put(todoData);
             }
-        } catch (JSONException e) {
+        } catch (JSONException | CursorIndexOutOfBoundsException e) {
             Messages.logMessage(TAG_CLASS, e.toString());
         }
         cursor.close();
@@ -88,8 +89,12 @@ public class DatabaseController {
                 "= " + String.valueOf(categoryID) + ";";
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         StringBuilder desc = new StringBuilder();
-        while (!cursor.moveToNext()) {
-            desc.append(cursor.getString(0));
+        try {
+            while (cursor.moveToNext()) {
+                desc.append(cursor.getString(0));
+            }
+        }catch (CursorIndexOutOfBoundsException e){
+            Messages.logMessage(TAG_CLASS,e.toString());
         }
         cursor.close();
         return desc.toString();
@@ -105,12 +110,12 @@ public class DatabaseController {
         String query = "SELECT * FROM " + Constants.CATEGORY_TABLE_NAME;
         JSONArray categoryArray = new JSONArray();
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
-        while (!cursor.moveToNext()) {
-            JSONObject category=new JSONObject();
+        while (cursor.moveToNext()) {
+            JSONObject category = new JSONObject();
             try {
                 category.put(Constants.CATEGORY_TABLE_ID, cursor.getInt(0));
                 category.put(Constants.CATEGORY_TABLE_DESC, cursor.getString(1));
-            } catch (JSONException e) {
+            } catch (JSONException | CursorIndexOutOfBoundsException e) {
                 Messages.logMessage(TAG_CLASS, e.toString());
             }
             categoryArray.put(category);
@@ -130,7 +135,7 @@ public class DatabaseController {
                 Constants.CATEGORY_TABLE_ID + "=" + String.valueOf(categoryID) + ";";
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         cursor.moveToLast();
-        Messages.logMessage(TAG_CLASS,"Deleted the Category. ");
+        Messages.logMessage(TAG_CLASS, "Deleted the Category. ");
         cursor.close();
     }
 
@@ -145,8 +150,32 @@ public class DatabaseController {
                 Constants.TODO_TABLE_ID + "=" + String.valueOf(todoId) + ";";
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         cursor.moveToLast();
-        Messages.logMessage(TAG_CLASS,"Deleted TODO.");
+        Messages.logMessage(TAG_CLASS, "Deleted TODO.");
         cursor.close();
+    }
+
+    /**
+     * This is the method to get the Category ID by the name.
+     *
+     * @param category: The name of the category.
+     * @return JSON Object: Containing the category Object which matched.
+     */
+    public JSONObject getCategoryID(String category) {
+        SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
+        String query = "SELECT * FROM " + Constants.CATEGORY_TABLE_NAME + " WHERE " +
+                Constants.CATEGORY_TABLE_DESC + "='" + category + "';";
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        JSONObject categoryObject = new JSONObject();
+        try {
+            while (cursor.moveToNext()) {
+
+                categoryObject.put(Constants.CATEGORY_TABLE_ID, cursor.getInt(0));
+                categoryObject.put(Constants.CATEGORY_TABLE_DESC, cursor.getString(1));
+            }
+        } catch (JSONException e) {
+            Messages.logMessage(TAG_CLASS, e.toString());
+        }
+        return categoryObject;
     }
 
     public static class Helper extends SQLiteOpenHelper {

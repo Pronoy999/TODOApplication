@@ -23,10 +23,11 @@ import java.util.ArrayList;
  */
 
 public class TodoAdapter extends ArrayAdapter {
-    ArrayList<Todo> todoList;
+    private ArrayList<Todo> todoList;
 
     public TodoAdapter(Activity context, ArrayList<Todo> todoList) {
         super(context, 0, todoList);
+        this.todoList=todoList;
     }
 
     @NonNull

@@ -2,12 +2,12 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.AppCompatEditText
         android:id="@+id/categoryDescEnter"
+        android:textColor="#000"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
@@ -22,7 +22,7 @@
         android:id="@+id/addCategoryButton"
         android:layout_width="129dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="56dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginTop="76dp"
         android:background="@drawable/circle_button"
         android:text="@string/add_category_button"
@@ -39,6 +39,7 @@
         android:background="@drawable/circle_button"
         android:text="@string/discard"
         app:layout_constraintEnd_toStartOf="@+id/addCategoryButton"
+        app:layout_constraintHorizontal_bias="0.317"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categoryDescEnter" />
 </android.support.constraint.ConstraintLayout>

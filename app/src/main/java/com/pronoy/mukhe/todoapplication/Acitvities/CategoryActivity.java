@@ -1,12 +1,9 @@
 package com.pronoy.mukhe.todoapplication.Acitvities;
 
-import android.app.Dialog;
-import android.content.ContentValues;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.ListView;
 
@@ -22,29 +19,31 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class AddCategoryActivity extends AppCompatActivity {
+public class CategoryActivity extends AppCompatActivity {
     ListView todoList;
     FloatingActionButton floatingActionButton;
     CategoryAdapter categoryAdapter;
-    private static final String TAG_CLASS = AddCategoryActivity.class.getSimpleName();
+    private static final String TAG_CLASS = CategoryActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
+        setTitle( getResources().getString(R.string.categoryTitle));
         initializeViews();
         getDataFromDatabase();
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddCategoryDialog();
+                Intent addCategoryIntent=new Intent(CategoryActivity.this,AddCategoryDialog.class);
+                startActivityForResult(addCategoryIntent,Constants.ADD_CATEGORY_DIALOG_REQUEST_CODE);
             }
         });
     }
 
     private void initializeViews() {
-        todoList = findViewById(R.id.todoList);
-        floatingActionButton = findViewById(R.id.addTodo);
+        todoList = findViewById(R.id.categoryList);
+        floatingActionButton = findViewById(R.id.addCategory);
     }
 
     /**
@@ -64,44 +63,21 @@ public class AddCategoryActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Messages.logMessage(TAG_CLASS, e.toString());
         }
-        categoryAdapter = new CategoryAdapter(AddCategoryActivity.this,
+        categoryAdapter = new CategoryAdapter(CategoryActivity.this,
                 categoryArrayList);
         todoList.setAdapter(categoryAdapter);
         categoryAdapter.notifyDataSetChanged();
     }
 
-    /**
-     * This the method to add the category to the list.
-     * @param category: The new Category.
-     */
-    private void addCategory(String category){
-        ContentValues values=new ContentValues();
-        values.put(Constants.CATEGORY_TABLE_DESC,category);
-        Constants.databaseController.inserDataCategory(values);
-        categoryAdapter.notifyDataSetChanged();
-    }
-
-    /**
-     * This is the method to show the add category dialog.
-     */
-    private void showAddCategoryDialog(){
-        final Dialog dialog=new Dialog(getApplicationContext());
-        dialog.setContentView(R.layout.add_category_dialog);
-        AppCompatButton saveButton=dialog.findViewById(R.id.addCategoryButton);
-        AppCompatButton discardButton=dialog.findViewById(R.id.discardCategoryButton);
-        final AppCompatEditText categoryText=dialog.findViewById(R.id.categoryDescEnter);
-        discardButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==Constants.ADD_CATEGORY_DIALOG_REQUEST_CODE){
+            if(resultCode==RESULT_OK){
+                getDataFromDatabase();
             }
-        });
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addCategory(categoryText.getText().toString());
+            else{
+                Messages.toastMessage(getApplicationContext(),"Couldn't add Category.","");
             }
-        });
-        dialog.show();
+        }
     }
 }

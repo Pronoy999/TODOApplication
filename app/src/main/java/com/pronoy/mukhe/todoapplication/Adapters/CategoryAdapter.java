@@ -25,6 +25,7 @@ public class CategoryAdapter extends ArrayAdapter {
     ArrayList<Category> categories;
     public CategoryAdapter(Activity context, ArrayList<Category> list){
         super(context,0,list);
+        this.categories=list;
     }
 
     @NonNull
