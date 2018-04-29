@@ -69,34 +69,7 @@ public class AddTodoDialog extends AppCompatActivity {
                 } else _pickerLayout.setVisibility(View.GONE);
             }
         });
-        _priority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i > 0) {
-                    priority = adapterView.getItemAtPosition(i).toString();
-                    Messages.snackbar(view, "Priority Selected: " + priority, "");
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                Messages.toastMessage(getApplicationContext(), "Please select a Priority.", "");
-            }
-        });
-        _category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i > 0) {
-                    category = adapterView.getItemAtPosition(i).toString();
-                    Messages.snackbar(view, "Category selected: " + category, "");
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                Messages.toastMessage(getApplicationContext(), "Please select a Priority.", "");
-            }
-        });
         final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
@@ -232,6 +205,22 @@ public class AddTodoDialog extends AppCompatActivity {
         };
         categoryAdapter.setDropDownViewResource(R.layout.spinner_item);
         _category.setAdapter(categoryAdapter);
+
+        _category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i > 0) {
+                    category = adapterView.getItemAtPosition(i).toString();
+                    Messages.snackbar(view, "Category selected: " + category, "");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Messages.toastMessage(getApplicationContext(), "Please select a Priority.", "");
+            }
+        });
+
         ArrayAdapter<String> priorityAdapter = new ArrayAdapter<String>(this,
                 R.layout.spinner_item, R.id.priorityEnter, priorityList) {
             @Override
@@ -255,6 +244,21 @@ public class AddTodoDialog extends AppCompatActivity {
         };
         priorityAdapter.setDropDownViewResource(R.layout.spinner_item);
         _priority.setAdapter(priorityAdapter);
+
+        _priority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i > 0) {
+                    priority = adapterView.getItemAtPosition(i).toString();
+                    Messages.snackbar(view, "Priority Selected: " + priority, "");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Messages.toastMessage(getApplicationContext(), "Please select a Priority.", "");
+            }
+        });
     }
 
     /**
