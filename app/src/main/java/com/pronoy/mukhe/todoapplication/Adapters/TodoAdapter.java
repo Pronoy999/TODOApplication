@@ -64,8 +64,10 @@ public class TodoAdapter extends ArrayAdapter {
             String parts[]=date.split(":");
             String newDate=parts[0]+":"+parts[1];
             _time.setText(newDate);
-            _priority.setText(String.valueOf(todo.getPriority()));
-            _category.setText(todo.getCategory());
+            String temp="Priority: "+todo.getPriority();
+            _priority.setText(String.valueOf(temp));
+            temp="Category: "+todo.getCategory();
+            _category.setText(temp);
             _deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -85,6 +87,7 @@ public class TodoAdapter extends ArrayAdapter {
                     todoList.remove(todo);
                     Constants.databaseController.deleteTodoById(todo.getId());
                     notifyDataSetChanged();
+                    Messages.snackbar(view,todo.getTitle()+" completed.","");
                 }
             });
         }
