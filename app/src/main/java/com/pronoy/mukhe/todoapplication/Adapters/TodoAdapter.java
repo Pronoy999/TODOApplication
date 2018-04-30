@@ -36,10 +36,11 @@ import static android.content.Context.ALARM_SERVICE;
 public class TodoAdapter extends ArrayAdapter {
     private ArrayList<Todo> todoList;
     Context context;
+
     public TodoAdapter(Activity context, ArrayList<Todo> todoList) {
         super(context, 0, todoList);
-        this.context=context;
-        this.todoList=todoList;
+        this.context = context;
+        this.todoList = todoList;
     }
 
     @NonNull
@@ -60,24 +61,22 @@ public class TodoAdapter extends ArrayAdapter {
             final Todo todo = todoList.get(position);
             _title.setText(todo.getTitle());
             _desc.setText(todo.getDesc());
-            String date=String.valueOf(todo.getDate());
-            String parts[]=date.split(":");
-            String newDate=parts[0]+":"+parts[1];
+            String date = String.valueOf(todo.getDate());
+            String parts[] = date.split(":");
+            String newDate = parts[0] + ":" + parts[1];
             _time.setText(newDate);
-            String temp="Priority: "+todo.getPriority();
+            String temp = "Priority: " + todo.getPriority();
             _priority.setText(String.valueOf(temp));
-            temp="Category: "+todo.getCategory();
+            temp = "Category: " + todo.getCategory();
             _category.setText(temp);
             _deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     todoList.remove(todo);
                     Constants.databaseController.deleteTodoById(todo.getId());
+                    cancelAlarm(todo.getTitle(), todo.getDesc(), todo.getId());
+                    Messages.snackbar(view, todo.getTitle() + " deleted.", "");
                     notifyDataSetChanged();
-                    Calendar calendar=Calendar.getInstance();
-                    calendar.setTime(todo.getDate());
-                    cancelAlarm(todo.getTitle(),todo.getDesc(),calendar.getTimeInMillis());
-                    Messages.snackbar(view,todo.getTitle()+" deleted.","");
                 }
             });
             _circle.setOnClickListener(new View.OnClickListener() {
@@ -87,16 +86,21 @@ public class TodoAdapter extends ArrayAdapter {
                     todoList.remove(todo);
                     Constants.databaseController.deleteTodoById(todo.getId());
                     notifyDataSetChanged();
-                    Messages.snackbar(view,todo.getTitle()+" completed.","");
+                    Messages.snackbar(view, todo.getTitle() + " completed.", "");
                 }
             });
         }
         return todoItem;
     }
-    private void cancelAlarm(String title, String desc, long reminderTime) {
+
+    private void cancelAlarm(String title, String desc, int id) {
         Intent intent = new Intent(context, AlarmReceiver.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.TODO_TABLE_TITLE, title);
+        bundle.putString(Constants.TODO_TABLE_DESC, desc);
+        intent.putExtras(bundle);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                Constants.NOTIFICATION_CHANNEL_ID,
+                id,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);

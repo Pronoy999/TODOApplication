@@ -12,4 +12,6 @@
     <string name="categoryTitle">Add Category</string>
     <string name="categories_menu">Categories</string>
     <string name="open_to_do">Open to Do</string>
+    <string name="todoTitle">Your Todos</string>
+    <string name="addTodo">Add a TODO</string>
 </resources>

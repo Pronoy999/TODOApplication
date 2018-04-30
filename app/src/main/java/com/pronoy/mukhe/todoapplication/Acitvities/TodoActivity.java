@@ -32,6 +32,7 @@ public class TodoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo);
+        setTitle(getResources().getString(R.string.todoTitle));
         initializeViews();
         getAllData();
         floatingActionButton.setOnClickListener(new View.OnClickListener() {

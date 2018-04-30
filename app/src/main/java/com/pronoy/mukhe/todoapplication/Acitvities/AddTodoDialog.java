@@ -59,6 +59,7 @@ public class AddTodoDialog extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_todo_dialog);
+        setTitle(getResources().getString(R.string.addTodo));
         initializeViews();
         _pickerLayout.setVisibility(View.GONE);
         addCategoryToList();
@@ -116,22 +117,27 @@ public class AddTodoDialog extends AppCompatActivity {
         _saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (_isReminder.isChecked()) {
-                    if (!_date.getText().toString().equalsIgnoreCase("") &&
-                            !_time.getText().toString().equalsIgnoreCase("") &&
-                            !category.equalsIgnoreCase("") &&
+                try {
+                    if (_isReminder.isChecked()) {
+                        if (!_date.getText().toString().equalsIgnoreCase("") &&
+                                !_time.getText().toString().equalsIgnoreCase("") &&
+                                !category.equalsIgnoreCase("") &&
+                                !priority.equalsIgnoreCase("")) {
+                            saveReminder(true);
+                        } else {
+                            Messages.toastMessage(getApplicationContext(),
+                                    "Please select a date and time.", "");
+                        }
+                    } else if (!category.equalsIgnoreCase("") &&
                             !priority.equalsIgnoreCase("")) {
-                        saveReminder(true);
+                        saveReminder(false);
                     } else {
                         Messages.toastMessage(getApplicationContext(),
-                                "Please select a date and time.", "");
+                                "Please select all the fields.", "");
                     }
-                } else if (!category.equalsIgnoreCase("") &&
-                        !priority.equalsIgnoreCase("")) {
-                    saveReminder(false);
-                } else {
-                    Messages.toastMessage(getApplicationContext(),
-                            "Please select all the fields.", "");
+                } catch (NullPointerException e) {
+                    Messages.logMessage(TAG_CLASS, e.toString());
+                    Messages.toastMessage(getApplicationContext(), "Fill in the details.", "");
                 }
             }
         });
@@ -281,20 +287,24 @@ public class AddTodoDialog extends AppCompatActivity {
             values.put(Constants.TODO_TABLE_DESC, desc);
             values.put(Constants.TODO_TABLE_PRIOROTY, Integer.valueOf(priority));
             values.put(Constants.TODO_TABLE_CATEGORYID, categoryId);
+            long reminderTime = 0;
             if (isReminder) {
                 Calendar calendar = Calendar.getInstance();
-                calendar.set(yearSelected, monthSelected, daySelected, hourSelected, minuteSelected,0);
-                long reminderTime = calendar.getTimeInMillis();
+                calendar.set(yearSelected, monthSelected, daySelected, hourSelected, minuteSelected, 0);
+                reminderTime = calendar.getTimeInMillis();
                 Messages.logMessage(TAG_CLASS, "***" + reminderTime + "");
                 values.put(Constants.TODO_TABLE_TIME_MILIS, reminderTime);
-                setAlarm(title, desc, reminderTime);
             } else {
                 values.put(Constants.TODO_TABLE_TIME_MILIS, 0);
             }
-            if (Constants.databaseController.insertDataTodo(values) < 0) {
+            long id = Constants.databaseController.insertDataTodo(values);
+            if (id < 0) {
                 Messages.toastMessage(getApplicationContext(), "Couldn't save Reminder.", "");
                 finishActivity(false);
                 return;
+            }
+            if (isReminder) {
+                setAlarm(title, desc, reminderTime, (int) id);
             }
             Messages.toastMessage(getApplicationContext(), "Reminder saved.", "");
             finishActivity(true);
@@ -312,14 +322,14 @@ public class AddTodoDialog extends AppCompatActivity {
      * @param desc:         The description of the TO_DO.
      * @param reminderTime: The exact time for the reminder.
      */
-    private void setAlarm(String title, String desc, long reminderTime) {
+    private void setAlarm(String title, String desc, long reminderTime, int id) {
         Intent intent = new Intent(AddTodoDialog.this, AlarmReceiver.class);
         Bundle bundle = new Bundle();
         bundle.putString(Constants.TODO_TABLE_TITLE, title);
         bundle.putString(Constants.TODO_TABLE_DESC, desc);
         intent.putExtras(bundle);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(AddTodoDialog.this,
-                Constants.NOTIFICATION_CHANNEL_ID,
+                id,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
