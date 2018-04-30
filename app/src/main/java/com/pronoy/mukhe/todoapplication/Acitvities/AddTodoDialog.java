@@ -215,9 +215,6 @@ public class AddTodoDialog extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i > 0) {
                     category = adapterView.getItemAtPosition(i).toString();
-                    Messages.toastMessage(getApplicationContext(),
-                            "Category selected: " + category,
-                            "");
                 }
             }
 
@@ -258,9 +255,6 @@ public class AddTodoDialog extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i > 0) {
                     priority = adapterView.getItemAtPosition(i).toString();
-                    Messages.toastMessage(getApplicationContext(),
-                            "Priority Selected: " + priority,
-                            "");
                 }
             }
 
