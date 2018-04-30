@@ -9,5 +9,7 @@
     </style>
     <style name="custom"
         parent="Theme.AppCompat.Light.Dialog"/>
+    <style name="splash"
+        parent="Theme.Design.Light.NoActionBar"/>
 
 </resources>

@@ -57,4 +57,6 @@ public class Constants {
     public static final String LOG_IN_STATUS="loginStatus";
     public static final int ADD_TODO_DIALOG_REQUEST_CODE =69;
     public static final int ADD_CATEGORY_DIALOG_REQUEST_CODE=169;
+    public static final int NOTIFICATION_CHANNEL_ID=269;
+    public static final int PENDING_INTENT_REQUEST_CODE=55;
 }

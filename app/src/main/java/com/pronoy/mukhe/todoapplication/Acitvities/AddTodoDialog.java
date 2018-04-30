@@ -1,6 +1,8 @@
 package com.pronoy.mukhe.todoapplication.Acitvities;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -23,6 +25,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import com.pronoy.mukhe.todoapplication.Helper.AlarmReceiver;
 import com.pronoy.mukhe.todoapplication.Helper.Constants;
 import com.pronoy.mukhe.todoapplication.Helper.Messages;
 import com.pronoy.mukhe.todoapplication.R;
@@ -212,13 +215,17 @@ public class AddTodoDialog extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i > 0) {
                     category = adapterView.getItemAtPosition(i).toString();
-                    Messages.snackbar(view, "Category selected: " + category, "");
+                    Messages.toastMessage(getApplicationContext(),
+                            "Category selected: " + category,
+                            "");
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                Messages.toastMessage(getApplicationContext(), "Please select a Priority.", "");
+                Messages.toastMessage(getApplicationContext(),
+                        "Please select a Priority.",
+                        "");
             }
         });
 
@@ -251,7 +258,9 @@ public class AddTodoDialog extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i > 0) {
                     priority = adapterView.getItemAtPosition(i).toString();
-                    Messages.snackbar(view, "Priority Selected: " + priority, "");
+                    Messages.toastMessage(getApplicationContext(),
+                            "Priority Selected: " + priority,
+                            "");
                 }
             }
 
@@ -280,10 +289,11 @@ public class AddTodoDialog extends AppCompatActivity {
             values.put(Constants.TODO_TABLE_CATEGORYID, categoryId);
             if (isReminder) {
                 Calendar calendar = Calendar.getInstance();
-                calendar.set(yearSelected, monthSelected, daySelected, hourSelected, minuteSelected);
+                calendar.set(yearSelected, monthSelected, daySelected, hourSelected, minuteSelected,0);
                 long reminderTime = calendar.getTimeInMillis();
-                Messages.logMessage(TAG_CLASS,"***"+reminderTime+"");
+                Messages.logMessage(TAG_CLASS, "***" + reminderTime + "");
                 values.put(Constants.TODO_TABLE_TIME_MILIS, reminderTime);
+                setAlarm(title, desc, reminderTime);
             } else {
                 values.put(Constants.TODO_TABLE_TIME_MILIS, 0);
             }
@@ -299,6 +309,27 @@ public class AddTodoDialog extends AppCompatActivity {
             Messages.toastMessage(getApplicationContext(), "Couldn't save Reminder.", "");
             finishActivity(false);
         }
+    }
+
+    /**
+     * This is the method to set the alarm.
+     *
+     * @param title:        The Title of the TO_DO.
+     * @param desc:         The description of the TO_DO.
+     * @param reminderTime: The exact time for the reminder.
+     */
+    private void setAlarm(String title, String desc, long reminderTime) {
+        Intent intent = new Intent(AddTodoDialog.this, AlarmReceiver.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.TODO_TABLE_TITLE, title);
+        bundle.putString(Constants.TODO_TABLE_DESC, desc);
+        intent.putExtras(bundle);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(AddTodoDialog.this,
+                Constants.NOTIFICATION_CHANNEL_ID,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, reminderTime, pendingIntent);
     }
 
     /**

@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Acitvities.SplashScreen">
+        <activity android:name=".Acitvities.SplashScreen"
+            android:theme="@style/splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,6 +27,9 @@
             android:theme="@style/custom" />
         <activity android:name=".Acitvities.AddCategoryDialog"
             android:theme="@style/custom"/>
+        <receiver android:name=".Helper.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>
