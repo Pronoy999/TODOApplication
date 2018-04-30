@@ -93,6 +93,13 @@ public class TodoAdapter extends ArrayAdapter {
         return todoItem;
     }
 
+    /**
+     * This is the method to cancel the alarm if the reminder is deleted.
+     *
+     * @param title: The title of the Reminder.
+     * @param desc:  The description of the To_Do.
+     * @param id:    The id for that particular To_Do.
+     */
     private void cancelAlarm(String title, String desc, int id) {
         Intent intent = new Intent(context, AlarmReceiver.class);
         Bundle bundle = new Bundle();
