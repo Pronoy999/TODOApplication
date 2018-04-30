@@ -25,30 +25,24 @@
         android:id="@+id/addCategoryButton"
         android:layout_width="129dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginEnd="28dp"
         android:layout_marginTop="48dp"
         android:background="@drawable/circle_button"
         android:text="@string/add_category_button"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryDescEnter"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/categoryDescEnter" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/discardCategoryButton"
         android:layout_width="129dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="48dp"
         android:background="@drawable/circle_button"
         android:text="@string/discard"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/addCategoryButton"
-        app:layout_constraintHorizontal_bias="0.514"
+        app:layout_constraintHorizontal_bias="0.092"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryDescEnter"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/categoryDescEnter" />
 </android.support.constraint.ConstraintLayout>

@@ -73,6 +73,7 @@ public class DatabaseController {
             Messages.logMessage(TAG_CLASS, e.toString());
         }
         cursor.close();
+        sqLiteDatabase.close();
         return todoArray;
     }
 
@@ -97,6 +98,7 @@ public class DatabaseController {
             Messages.logMessage(TAG_CLASS,e.toString());
         }
         cursor.close();
+        sqLiteDatabase.close();
         return desc.toString();
     }
 
@@ -121,6 +123,7 @@ public class DatabaseController {
             categoryArray.put(category);
         }
         cursor.close();
+        sqLiteDatabase.close();
         return categoryArray;
     }
 
@@ -137,6 +140,7 @@ public class DatabaseController {
         cursor.moveToLast();
         Messages.logMessage(TAG_CLASS, "Deleted the Category. ");
         cursor.close();
+        sqLiteDatabase.close();
     }
 
     /**
@@ -175,6 +179,8 @@ public class DatabaseController {
         } catch (JSONException e) {
             Messages.logMessage(TAG_CLASS, e.toString());
         }
+        cursor.close();
+        sqLiteDatabase.close();
         return categoryObject;
     }
 
