@@ -101,6 +101,7 @@ public class TodoActivity extends AppCompatActivity {
             case R.id.openCategory:
                 Intent intent=new Intent(TodoActivity.this,CategoryActivity.class);
                 startActivity(intent);
+                finish();
         }
         return super.onOptionsItemSelected(item);
     }
