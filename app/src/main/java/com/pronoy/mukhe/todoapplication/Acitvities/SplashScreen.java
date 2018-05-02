@@ -20,14 +20,15 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         Constants.databaseController = new DatabaseController(getApplicationContext());
+        Constants.NOTIFICATION_MANAGER = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Constants.NOTIFICATION_CHANNEL=new NotificationChannel(String
+            Constants.NOTIFICATION_CHANNEL = new NotificationChannel(String
                     .valueOf(Constants.NOTIFICATION_CHANNEL_ID),
                     Constants.NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
             Constants.NOTIFICATION_CHANNEL.setDescription(Constants.NOTIFICATION_CHANNEL_DESCRIPTION);
             Constants.NOTIFICATION_MANAGER.createNotificationChannel(Constants.NOTIFICATION_CHANNEL);
         }
-        Constants.NOTIFICATION_MANAGER= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
