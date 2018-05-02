@@ -90,7 +90,7 @@ public class AddTodoDialog extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Calendar calendar = Calendar.getInstance();
-                new DatePickerDialog(AddTodoDialog.this, dateSetListener,
+                new DatePickerDialog(AddTodoDialog.this, R.style.custom, dateSetListener,
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -109,7 +109,7 @@ public class AddTodoDialog extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Calendar calendar = Calendar.getInstance();
-                new TimePickerDialog(AddTodoDialog.this, timeSetListener,
+                new TimePickerDialog(AddTodoDialog.this, R.style.custom, timeSetListener,
                         calendar.get(Calendar.HOUR),
                         calendar.get(Calendar.MINUTE), true).show();
             }

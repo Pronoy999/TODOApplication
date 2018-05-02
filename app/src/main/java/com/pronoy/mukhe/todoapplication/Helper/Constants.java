@@ -1,5 +1,10 @@
 package com.pronoy.mukhe.todoapplication.Helper;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Build;
+
 /**
  * Created by mukhe on 26-Apr-18.
  * This is the class to Keep all the constants for the App.
@@ -52,12 +57,15 @@ public class Constants {
     /**
      * Drop Table.
      */
-    static final String DROP_TABLE_CATEGORY="DROP TABLE "+Constants.CATEGORY_TABLE_NAME;
-    static final String DROP_TABLE_TODO="DROP TABLE "+Constants.TODO_TABLE_NAME;
-    public static final String LOG_IN_STATUS="loginStatus";
-    public static final int ADD_TODO_DIALOG_REQUEST_CODE =69;
-    public static final int ADD_CATEGORY_DIALOG_REQUEST_CODE=169;
-    public static final int NOTIFICATION_ID =269;
-    public static final int NOTIFICATION_CHANNEL_ID=59;
-    public static final String NOTIFICATION_CHANNEL_NAME="Todo Tasks";
+    static final String DROP_TABLE_CATEGORY = "DROP TABLE " + Constants.CATEGORY_TABLE_NAME;
+    static final String DROP_TABLE_TODO = "DROP TABLE " + Constants.TODO_TABLE_NAME;
+    public static final String LOG_IN_STATUS = "loginStatus";
+    public static final int ADD_TODO_DIALOG_REQUEST_CODE = 69;
+    public static final int ADD_CATEGORY_DIALOG_REQUEST_CODE = 169;
+    public static final int NOTIFICATION_ID = 269;
+    public static final int NOTIFICATION_CHANNEL_ID = 59;
+    public static final String NOTIFICATION_CHANNEL_NAME = "Todo Tasks";
+    public static final String NOTIFICATION_CHANNEL_DESCRIPTION="Notifications for reminders or todo's";
+    public static NotificationChannel NOTIFICATION_CHANNEL;
+    public static NotificationManager NOTIFICATION_MANAGER;
 }
