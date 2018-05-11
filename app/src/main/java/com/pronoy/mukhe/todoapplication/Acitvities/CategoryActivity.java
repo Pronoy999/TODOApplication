@@ -31,18 +31,21 @@ public class CategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
-        setTitle( getResources().getString(R.string.categoryTitle));
+        setTitle(getResources().getString(R.string.categoryTitle));
         initializeViews();
         getDataFromDatabase();
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent addCategoryIntent=new Intent(CategoryActivity.this,AddCategoryDialog.class);
-                startActivityForResult(addCategoryIntent,Constants.ADD_CATEGORY_DIALOG_REQUEST_CODE);
+                Intent addCategoryIntent = new Intent(CategoryActivity.this, AddCategoryDialog.class);
+                startActivityForResult(addCategoryIntent, Constants.ADD_CATEGORY_DIALOG_REQUEST_CODE);
             }
         });
     }
 
+    /**
+     * This is the method to initialize the views.
+     */
     private void initializeViews() {
         todoList = findViewById(R.id.categoryList);
         floatingActionButton = findViewById(R.id.addCategory);
@@ -71,29 +74,41 @@ public class CategoryActivity extends AppCompatActivity {
         categoryAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * This is the method which is invoked when the call returns from other activities.
+     *
+     * @param requestCode: The Request code by which the activity was requested.
+     * @param resultCode:  The result which was send from the last activity.
+     * @param data:        The data which is passed from the activity.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==Constants.ADD_CATEGORY_DIALOG_REQUEST_CODE){
-            if(resultCode==RESULT_OK){
+        if (requestCode == Constants.ADD_CATEGORY_DIALOG_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
                 getDataFromDatabase();
-            }
-            else{
-                Messages.toastMessage(getApplicationContext(),"Couldn't add Category.","");
+            } else {
+                Messages.toastMessage(getApplicationContext(), "Couldn't add Category.", "");
             }
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.open_todo,menu);
+        getMenuInflater().inflate(R.menu.open_todo, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * This is the method which is invoked when the options menu is touched.
+     *
+     * @param item: The item which was clicked.
+     * @return true for click registered.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.openTodo:
-                Intent todoIntent=new Intent(CategoryActivity.this,TodoActivity.class);
+                Intent todoIntent = new Intent(CategoryActivity.this, TodoActivity.class);
                 startActivity(todoIntent);
                 finish();
         }

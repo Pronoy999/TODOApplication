@@ -149,6 +149,9 @@ public class AddTodoDialog extends AppCompatActivity {
         });
     }
 
+    /**
+     * This is the method which initializes the widgets.
+     */
     private void initializeViews() {
         _title = findViewById(R.id.todoTitleEnter);
         _desc = findViewById(R.id.todoDescEnter);
