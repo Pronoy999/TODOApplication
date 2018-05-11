@@ -10,7 +10,10 @@ to add a reminder or not. With the new update for the notifications for Android 
 and they are all bundled up within a same channel. 
 
 Hope you enjoy the app with the new color. 
-Feel free to drop some suggestions at https://github.com/Pronoy999/TODOApplication/issues
+Feel free to drop some suggestions at 
+
+
+       https://github.com/Pronoy999/TODOApplication/issues
 
 
 # License
